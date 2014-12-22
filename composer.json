@@ -1,0 +1,12 @@
+{
+    "name": "jasonwwl/wechat",
+    "description": "微信公共账号SDK",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "jasonwx",
+            "email": "jasonwx@163.com"
+        }
+    ],
+    "require": {}
+}
