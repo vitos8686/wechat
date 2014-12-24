@@ -4,9 +4,17 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "jasonwx",
+            "name": "JasonWang",
             "email": "jasonwx@163.com"
         }
     ],
-    "require": {}
+    "require": {
+        "symfony/event-dispatcher": "2.6.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "JasonWL\\WeChat": "src/"
+        }
+    },
+    "minimum-stability": "dev"
 }
