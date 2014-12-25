@@ -18,6 +18,8 @@ class Response
      */
     public $content;
 
+    protected $producedContentCache;
+
     /**
      * @var ResponseContentProducer
      */
@@ -25,11 +27,14 @@ class Response
 
     public function getContent()
     {
-        if ($this->responseContentProducer) {
-            return $this->responseContentProducer->produce();
-        } else {
-            return $this->content;
+        if ($this->producedContentCache) {
+            return $this->producedContentCache;
         }
+        if ($this->responseContentProducer) {
+            $this->producedContentCache = $this->responseContentProducer->produce();
+            return $this->producedContentCache;
+        }
+        return $this->content;
     }
 
     public function setContent($content)

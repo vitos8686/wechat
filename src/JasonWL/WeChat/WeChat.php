@@ -68,11 +68,11 @@ class WeChat
         if (!isset($GLOBALS['HTTP_RAW_POST_DATA']) && !$this->debug) {
             throw new WechatException('未接收到HTTP_RAW_POST_DATA');
         }
-        if ($this->loger) {
-            call_user_func($this->loger, $GLOBALS['HTTP_RAW_POST_DATA']);
-        }
         $this->request = new Request($GLOBALS['HTTP_RAW_POST_DATA']);
         $this->eventDistributer($this->request);
+        if ($this->loger) {
+            call_user_func($this->loger, $GLOBALS['HTTP_RAW_POST_DATA'], $this->response->getContent());
+        }
         return $this->response;
     }
 
