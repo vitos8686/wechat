@@ -2,7 +2,11 @@
     "name": "jasonwwl/wechat",
     "description": "微信公共账号SDK",
     "license": "MIT",
-    "keywords": ["wechat", "api","wechat sdk"],
+    "keywords": [
+        "wechat",
+        "api",
+        "wechat sdk"
+    ],
     "authors": [
         {
             "name": "JasonWang",
@@ -10,7 +14,8 @@
         }
     ],
     "require": {
-        "symfony/event-dispatcher": "2.6.*"
+        "symfony/event-dispatcher": "2.6.*",
+        "kdyby/curl": "~2.2"
     },
     "autoload": {
         "psr-0": {
