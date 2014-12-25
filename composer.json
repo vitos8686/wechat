@@ -2,6 +2,7 @@
     "name": "jasonwwl/wechat",
     "description": "微信公共账号SDK",
     "license": "MIT",
+    "keywords": ["wechat", "api","wechat sdk"],
     "authors": [
         {
             "name": "JasonWang",
