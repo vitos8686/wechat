@@ -12,6 +12,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class WeChat
 {
+    protected $token;
     /**
      * 微信发过来的请求内容，并解析成array格式的
      * @var \JasonWL\WeChat\Request\Request
@@ -39,11 +40,9 @@ class WeChat
      * @param $appID
      * @param $appSecret
      */
-    public function __construct($token, $appID = '', $appSecret = '')
+    public function __construct($token)
     {
-        WeChatConfig::$token = $token;
-        WeChatConfig::$appId = $appID;
-        WeChatConfig::$appSecret = $appSecret;
+        $this->$token = $token;
         $this->response = new Response();
         $this->dispatcher = new EventDispatcher();
     }
@@ -118,7 +117,7 @@ class WeChat
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
 
-        $token = WeChatConfig::$token;
+        $token = $this->$token;
         $tmpArr = array($token, $timestamp, $nonce);
         // use SORT_STRING rule
         sort($tmpArr, SORT_STRING);
