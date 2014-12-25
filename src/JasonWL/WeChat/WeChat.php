@@ -3,12 +3,13 @@ namespace JasonWL\WeChat;
 
 
 use JasonWL\WeChat\Event\Event;
-use JasonWL\WeChat\Event\Listener\ListenerInterface;
+use JasonWL\WeChat\Event\LoggerEvent;
 use JasonWL\WeChat\Event\ResponseEvent;
 use JasonWL\WeChat\Exception\WeChatException;
 use JasonWL\WeChat\Request\Request;
 use JasonWL\WeChat\Response\Response;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class WeChat
 {
@@ -31,8 +32,6 @@ class WeChat
      * @var bool
      */
     protected $debug = false;
-
-    protected $loger;
 
     /**
      *
@@ -69,9 +68,10 @@ class WeChat
         }
         $this->request = new Request($GLOBALS['HTTP_RAW_POST_DATA']);
         $this->eventDistributer($this->request);
-        if ($this->loger) {
-            call_user_func($this->loger, $GLOBALS['HTTP_RAW_POST_DATA'], $this->response->getContent());
-        }
+        $this->dispatcher->dispatch(
+            Event::SERVICE_LOGGER,
+            new LoggerEvent($this->response, $this->request)
+        );
         return $this->response;
     }
 
@@ -148,17 +148,9 @@ class WeChat
         return $this->dispatcher;
     }
 
-    public function addSubscriber(ListenerInterface $listener)
+    public function addSubscriber(EventSubscriberInterface $listener)
     {
         $this->getDispatcher()->addSubscriber($listener);
-    }
-
-    /**
-     * @param $callFunction
-     */
-    public function addLoger($callFunction)
-    {
-        $this->loger = $callFunction;
     }
 
 }

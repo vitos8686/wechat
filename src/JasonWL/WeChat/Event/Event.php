@@ -11,6 +11,10 @@ namespace JasonWL\WeChat\Event;
 
 class Event
 {
+    /**
+     * 服务器被动响应时(微信端发来消息时)所触发的日志驱动事件
+     */
+    CONST SERVICE_LOGGER = 'service_logger';
     CONST MESSAGE_TEXT = 'text';
     CONST MESSAGE_IMAGE = 'image';
     CONST MESSAGE_VOICE = 'voice';

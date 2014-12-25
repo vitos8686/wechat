@@ -12,7 +12,7 @@ namespace JasonWL\WeChat\Event\Listener;
 use JasonWL\WeChat\Event\ResponseEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-interface ListenerInterface extends EventSubscriberInterface
+interface ResponseListenerInterface extends EventSubscriberInterface
 {
     public function onResponse(ResponseEvent $event);
 }
