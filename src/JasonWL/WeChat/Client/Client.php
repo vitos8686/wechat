@@ -9,10 +9,14 @@
 namespace JasonWL\WeChat\Client;
 
 
+use JasonWL\WeChat\Event\AccessCacheEvent;
+use JasonWL\WeChat\Event\Event;
 use JasonWL\WeChat\Exception\WeChatException;
 use Kdyby\Curl\CurlException;
 use Kdyby\Curl\Request;
 use Kdyby\Curl\Response;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class Client
 {
@@ -24,10 +28,18 @@ class Client
     protected $postParams;
     protected $postFile;
     protected $url;
+    /**
+     * @var EventDispatcher
+     */
+    protected static $dispatcher;
 
     /**
-     * @param string $appID
-     * @param string $appSecret
+     * @var AccessToken
+     */
+    protected $accessToken;
+
+    /**
+     * @throws WeChatException
      */
     public function __construct()
     {
@@ -38,6 +50,18 @@ class Client
         if (!$this->appID || !$this->appSecret) {
             throw new WeChatException("appid appsecret常量未定义");
         }
+        $this->accessToken = new AccessToken();
+    }
+
+    /**
+     * @return EventDispatcher
+     */
+    public static function getDispatcher()
+    {
+        if (!self::$dispatcher) {
+            self::$dispatcher = new EventDispatcher();
+        }
+        return self::$dispatcher;
     }
 
     /**
@@ -52,7 +76,17 @@ class Client
     }
 
     /**
-     * @param $url
+     * 订阅事件驱动
+     * @param EventSubscriberInterface $eventSubscriber
+     */
+    public static function addSubscriber(EventSubscriberInterface $eventSubscriber)
+    {
+        self::getDispatcher()->addSubscriber($eventSubscriber);
+    }
+
+
+    /**
+     * @return mixed
      * @throws WeChatException
      */
     public function request()
@@ -72,12 +106,18 @@ class Client
     }
 
     /**
-     * @todo 别忘了加入缓存机制
      * @return mixed
      * @throws WeChatException
      */
     private function getAccessToken()
     {
+        self::getDispatcher()->dispatch(
+            Event::CLIENT_ACCESS_CACHE_GET,
+            new AccessCacheEvent($this->accessToken)
+        );
+        if ($this->accessToken->getToken()) {
+            return $this->accessToken->getToken();
+        }
         $params = array(
             'grant_type' => 'client_credential',
             'appid' => $this->appID,
@@ -87,7 +127,13 @@ class Client
         $curlRequest = new Request($url);
         $response = $curlRequest->get($params);
         $result = $this->parseResponse($response);
-        return $result['access_token'];
+        $result['create_time'] = time();
+        $this->accessToken->setToken($result);
+        self::getDispatcher()->dispatch(
+            Event::CLIENT_ACCESS_CACHE_SET,
+            new AccessCacheEvent($this->accessToken)
+        );
+        return $this->accessToken->getToken();
     }
 
     protected function parseResponse(Response $response)
