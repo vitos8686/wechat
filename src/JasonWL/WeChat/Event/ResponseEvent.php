@@ -11,9 +11,9 @@ namespace JasonWL\WeChat\Event;
 
 use JasonWL\WeChat\Request\Request;
 use JasonWL\WeChat\Response\Response;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
 
-class ResponseEvent extends Event
+class ResponseEvent extends SymfonyEvent
 {
     /**
      * @var Request

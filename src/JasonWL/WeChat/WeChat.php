@@ -41,7 +41,7 @@ class WeChat
      */
     public function __construct($token)
     {
-        $this->$token = $token;
+        $this->token = $token;
         $this->response = new Response();
         $this->dispatcher = new EventDispatcher();
     }
@@ -116,9 +116,7 @@ class WeChat
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
-
-        $token = $this->$token;
-        $tmpArr = array($token, $timestamp, $nonce);
+        $tmpArr = array($this->token, $timestamp, $nonce);
         // use SORT_STRING rule
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode($tmpArr);
