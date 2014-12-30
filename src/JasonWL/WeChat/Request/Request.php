@@ -22,8 +22,10 @@ class Request
 
     public function parseToArray()
     {
-        $array_content = XmlRequest::parse($GLOBALS['HTTP_RAW_POST_DATA']);
-        $this->array_content = array_change_key_case($array_content, CASE_LOWER);
+        if ($this->raw_content) {
+            $array_content = XmlRequest::parse($this->raw_content);
+            $this->array_content = array_change_key_case($array_content, CASE_LOWER);
+        }
     }
 
     public function getRawContent()

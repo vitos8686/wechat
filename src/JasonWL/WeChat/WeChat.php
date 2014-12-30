@@ -34,10 +34,7 @@ class WeChat
     protected $debug = false;
 
     /**
-     *
-     * @param string $token 填写的URL需要正确响应微信发送的Token验证
-     * @param $appID
-     * @param $appSecret
+     * @param $token
      */
     public function __construct($token)
     {
@@ -54,24 +51,23 @@ class WeChat
      */
     public function handle()
     {
+        $this->request = new Request(isset($GLOBALS['HTTP_RAW_POST_DATA']) ?
+                $GLOBALS['HTTP_RAW_POST_DATA'] : ''
+        );
         if (!$this->checkSignature()) {
             throw new WeChatException('来源验证失败');
         }
 
         if ($this->isUrlValidate()) {
-            $this->response = $_GET['echostr'];
+            $this->response->setContent($_GET['echostr']);
             return $this->response;
         }
 
         if (!isset($GLOBALS['HTTP_RAW_POST_DATA']) && !$this->debug) {
             throw new WechatException('未接收到HTTP_RAW_POST_DATA');
         }
-        $this->request = new Request($GLOBALS['HTTP_RAW_POST_DATA']);
         $this->eventDistributer($this->request);
-        $this->dispatcher->dispatch(
-            Event::SERVICE_LOGGER,
-            new LoggerEvent($this->response, $this->request)
-        );
+        $this->logger();
         return $this->response;
     }
 
@@ -111,6 +107,7 @@ class WeChat
             return true;
         }
         if (!(isset($_GET['signature']) && isset($_GET['timestamp']) && isset($_GET['nonce']))) {
+            $this->logger('$_GET is empty');
             return false;
         }
         $signature = $_GET["signature"];
@@ -121,7 +118,12 @@ class WeChat
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode($tmpArr);
         $tmpStr = sha1($tmpStr);
-        return $tmpStr === $signature;
+        if ($tmpStr === $signature) {
+            return true;
+        } else {
+            $this->logger($tmpStr . '!==' . $signature);
+            return false;
+        }
     }
 
     /**
@@ -149,6 +151,18 @@ class WeChat
     public function addSubscriber(EventSubscriberInterface $listener)
     {
         $this->getDispatcher()->addSubscriber($listener);
+    }
+
+    public function logger($content = false)
+    {
+        if ($content) {
+            $content = $this->response->getContent() . "\n" . $content;
+            $this->response->setContent($content);
+        }
+        $this->dispatcher->dispatch(
+            Event::SERVICE_LOGGER,
+            new LoggerEvent($this->response, $this->request)
+        );
     }
 
 }
