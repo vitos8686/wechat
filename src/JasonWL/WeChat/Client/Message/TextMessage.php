@@ -8,20 +8,12 @@
 
 namespace JasonWL\WeChat\Client\Message;
 
-
-use JasonWL\WeChat\Client\ApiList;
-use JasonWL\WeChat\Client\Client;
-
-class TextMessage extends Client
+class TextMessage extends Message
 {
     public function __construct($toUser, $content)
     {
-        parent::__construct();
-        $this->post('touser', $toUser)
-            ->post('msgtype', 'text')
-            ->post('text', [
-                'content' => $content
-            ])
-            ->url(ApiList::SEND_MESSAGE);
+        parent::__construct($toUser);
+        $this->post('msgtype', 'text')
+            ->post('text', ['content' => $content]);
     }
 }

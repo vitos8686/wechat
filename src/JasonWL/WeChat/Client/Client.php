@@ -9,12 +9,10 @@
 namespace JasonWL\WeChat\Client;
 
 
+use Curl\Curl;
 use JasonWL\WeChat\Event\AccessCacheEvent;
 use JasonWL\WeChat\Event\Event;
 use JasonWL\WeChat\Exception\WeChatException;
-use Kdyby\Curl\CurlException;
-use Kdyby\Curl\Request;
-use Kdyby\Curl\Response;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -96,13 +94,57 @@ class Client
         $this->get('access_token', $accessToken);
         $getQueryString = http_build_query($this->getParams);
         $url = $this->getApiPrefix() . $url . '?' . $getQueryString;
-        if ($this->postParams) {
+        if ($this->postParams || $this->postFile) {
             $response = $this->doPost($url);
         } else {
             $response = $this->doGet($url);
         }
         $this->cleanRequestParams();
         return $this->parseResponse($response);
+    }
+
+    /**
+     * @param $url
+     * @return string
+     * @throws WeChatException
+     */
+    private function doPost($url)
+    {
+        try {
+            $curl = new Curl();
+            if (!$this->postFile) {
+                $curl->setHeader('Content-Type', 'application/json');
+                $postData = json_encode($this->postParams, JSON_UNESCAPED_UNICODE);
+            } else {
+                $postData = $this->postFile;
+            }
+            $curl->post($url, $postData);
+            if ($curl->error) {
+                throw new WeChatException($curl->error_message, $curl->error_code);
+            }
+        } catch (\ErrorException $e) {
+            throw new WeChatException($e->getMessage());
+        }
+        return $curl->raw_response;
+    }
+
+    /**
+     * @param $url
+     * @return null
+     * @throws WeChatException
+     */
+    private function doGet($url)
+    {
+        try {
+            $curl = new Curl();
+            $curl->get($url);
+            if ($curl->error) {
+                throw new WeChatException($curl->error_message, $curl->error_code);
+            }
+        } catch (\ErrorException $e) {
+            throw new WeChatException($e->getMessage());
+        }
+        return $curl->raw_response;
     }
 
     /**
@@ -123,10 +165,10 @@ class Client
             'appid' => $this->appID,
             'secret' => $this->appSecret
         );
-        $url = $this->getApiPrefix() . ApiList::AUTH_TOKEN;
-        $curlRequest = new Request($url);
-        $response = $curlRequest->get($params);
-        $result = $this->parseResponse($response);
+        $url = ApiList::API_PREFIX . ApiList::AUTH_TOKEN;
+        $curl = new Curl();
+        $curl->get($url, $params);
+        $result = $this->parseResponse($curl->raw_response);
         $result['create_time'] = time();
         $this->accessToken->setToken($result);
         self::getDispatcher()->dispatch(
@@ -136,51 +178,21 @@ class Client
         return $this->accessToken->getToken();
     }
 
-    protected function parseResponse(Response $response)
+    /**
+     * @param $response
+     * @return mixed
+     * @throws WeChatException
+     */
+    protected function parseResponse($response)
     {
-        $content = $response->getResponse();
-        $contentArr = json_decode($content, true);
-        if (!is_array($contentArr)) {
+        $responseArr = json_decode($response, true);
+        if (!is_array($responseArr)) {
             throw new WeChatException("微信端数据异常");
         }
-        if (isset($contentArr['errcode']) && $contentArr['errcode'] != 0) {
-            throw new WeChatException("错误码:{$contentArr['errcode']},原因:{$contentArr['errmsg']}");
+        if (isset($responseArr['errcode']) && $responseArr['errcode'] != 0) {
+            throw new WeChatException('微信端API的错误消息:' . $responseArr['errmsg'], $responseArr['errcode']);
         }
-        return $contentArr;
-    }
-
-    /**
-     * @param $url
-     * @return \Kdyby\Curl\Response
-     * @throws WeChatException
-     */
-    private function doPost($url)
-    {
-        $curlRequest = new Request($url);
-        $curlRequest->headers['Content-Type'] = 'application/json';
-        $postParams = json_encode($this->postParams, JSON_UNESCAPED_UNICODE);
-        try {
-            $response = $curlRequest->post($postParams);
-        } catch (CurlException $e) {
-            throw new WeChatException($e->getMessage());
-        }
-        return $response;
-    }
-
-    /**
-     * @param $url
-     * @return \Kdyby\Curl\Response
-     * @throws WeChatException
-     */
-    private function doGet($url)
-    {
-        $curlRequest = new Request($url);
-        try {
-            $response = $curlRequest->get();
-        } catch (CurlException $e) {
-            throw new WeChatException($e->getMessage());
-        }
-        return $response;
+        return $responseArr;
     }
 
     protected function getApiPrefix()
@@ -215,7 +227,7 @@ class Client
 
     protected function upFile($file)
     {
-        $this->postFile = $file;
+        $this->postFile['media'] = '@' . $file;
         return $this;
     }
 

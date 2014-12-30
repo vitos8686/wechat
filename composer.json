@@ -15,7 +15,7 @@
     ],
     "require": {
         "symfony/event-dispatcher": "2.6.*",
-        "kdyby/curl": "~2.2"
+        "php-curl-class/php-curl-class": "dev-master"
     },
     "autoload": {
         "psr-0": {
