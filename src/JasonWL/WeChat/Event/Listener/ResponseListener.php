@@ -14,9 +14,5 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 abstract class ResponseListener implements EventSubscriberInterface
 {
-    /**
-     * @param ResponseEvent $event
-     * @return mixed
-     */
-    abstract public function onResponse(ResponseEvent $event);
+
 }

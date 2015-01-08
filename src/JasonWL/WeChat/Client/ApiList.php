@@ -16,4 +16,6 @@ class ApiList
     CONST AUTH_CALLBACK_IP = '/getcallbackip';
     CONST SEND_MESSAGE = '/message/custom/send';
     CONST UPLOAD_MEDIA = 'http://file.api.weixin.qq.com/cgi-bin/media/upload';
+    CONST MENU_CREATE = '/menu/create';
+    CONST MENU_GET = '/menu/get';
 } 

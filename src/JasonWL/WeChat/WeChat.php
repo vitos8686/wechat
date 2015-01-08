@@ -85,6 +85,15 @@ class WeChat
                     return;
                 }
             }
+            if ($event === Event::EVENT_CLICK) {
+                if ($this->request->getArrayContent('EventKey')) {
+                    $this->dispatcher->dispatch(
+                        strtoupper($this->request->getArrayContent('EventKey')),
+                        new ResponseEvent($this->response, $this->request)
+                    );
+                    return;
+                }
+            }
             $this->dispatcher->dispatch(
                 $event,
                 new ResponseEvent($this->response, $this->request)

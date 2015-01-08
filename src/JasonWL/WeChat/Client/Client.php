@@ -223,6 +223,7 @@ class Client
     protected function url($url)
     {
         $this->url = $url;
+        return $this;
     }
 
     protected function upFile($file)
