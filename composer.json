@@ -15,7 +15,7 @@
     ],
     "require": {
         "symfony/event-dispatcher": "2.6.*",
-        "php-curl-class/php-curl-class": "dev-master",
+        "php-curl-class/php-curl-class": "~2.1",
         "b-b3rn4rd/phplame": "dev-master"
     },
     "autoload": {
