@@ -18,4 +18,6 @@ class ApiList
     CONST UPLOAD_MEDIA = 'http://file.api.weixin.qq.com/cgi-bin/media/upload';
     CONST MENU_CREATE = '/menu/create';
     CONST MENU_GET = '/menu/get';
+
+    CONST USER_INFO = '/user/info';
 } 
