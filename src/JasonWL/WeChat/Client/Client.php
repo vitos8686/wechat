@@ -151,7 +151,7 @@ class Client
      * @return mixed
      * @throws WeChatException
      */
-    private function getAccessToken()
+    protected function getAccessToken()
     {
         self::getDispatcher()->dispatch(
             Event::CLIENT_ACCESS_CACHE_GET,

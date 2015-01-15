@@ -9,6 +9,7 @@
 namespace JasonWL\WeChat\Client;
 
 
+use Curl\Curl;
 use JasonWL\WeChat\Exception\WeChatException;
 
 class Media extends Client
@@ -19,20 +20,35 @@ class Media extends Client
     const VOICE = 'voice';
     const THUMB = 'thumb';
 
-    /**
-     * @param string $type
-     * @param $filePath
-     * @throws WeChatException
-     */
-    public function __construct($type = self::IMAGE, $filePath)
+    public function __construct()
     {
         parent::__construct();
+
+    }
+
+    public function upload($type = self::IMAGE, $filePath)
+    {
         if (!file_exists($filePath) || !is_readable($filePath)) {
             throw new WeChatException('待上传的文件不可读或不存在:' . $filePath);
         }
         $this->upFile($filePath)
             ->get('type', $type)
-            ->url(ApiList::UPLOAD_MEDIA);
+            ->url(ApiList::MEDIA_UPLOAD);
+        return $this->request();
+    }
+
+    /**
+     * @param $mediaId
+     * @param $localFile
+     */
+    public function download($mediaId, $localFile)
+    {
+        $this->get('media_id', $mediaId);
+        $accessToken = $this->getAccessToken();
+        $this->get('access_token', $accessToken);
+        $getQueryString = http_build_query($this->getParams);
+        $url = ApiList::MEDIA_DOWNLOAD . '?' . $getQueryString;
+        self::curlGetFile($url, $localFile);
     }
 
     /**
@@ -44,5 +60,15 @@ class Media extends Client
         return null;
     }
 
+    public static function curlGetFile($url, $localFile)
+    {
+        $ch = curl_init($url);
+        $fp = fopen($localFile, 'w');
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+    }
 
-} 
+
+}
