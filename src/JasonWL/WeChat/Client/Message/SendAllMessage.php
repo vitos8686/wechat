@@ -9,10 +9,13 @@
 namespace JasonWL\WeChat\Client\Message;
 
 
-class SendAllMessage extends Message
+use JasonWL\WeChat\Client\Client;
+
+class SendAllMessage extends Client
 {
     public function __construct($mediaId)
     {
+        parent::__construct();
         $this->post('msgtype', 'mpnews')
             ->post('mpnews', ['media_id' => $mediaId])
             ->post('filter', array(
