@@ -37,6 +37,13 @@ class Media extends Client
         return $this->request();
     }
 
+    public function uploadNews($articles)
+    {
+        $this->post('articles', $articles)
+            ->url('https://api.weixin.qq.com/cgi-bin/media/uploadnews');
+        return $this->request();
+    }
+
     /**
      * @param $mediaId
      * @param $localFile
