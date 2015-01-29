@@ -13,15 +13,25 @@ use JasonWL\WeChat\Client\Client;
 
 class SendAllMessage extends Client
 {
-    public function __construct($mediaId)
+
+    public function send($mediaId)
     {
-        parent::__construct();
         $this->post('msgtype', 'mpnews')
             ->post('mpnews', ['media_id' => $mediaId])
             ->post('filter', array(
                 'is_to_all' => true
             ))
             ->url('https://api.weixin.qq.com/cgi-bin/message/mass/sendall');
+    }
+
+    public function preview($openId, $mediaId)
+    {
+        $this->post('touser', $openId)
+            ->post('mpnews', array(
+                'media_id' => $mediaId
+            ))
+            ->post('msgtype', 'mpnews')
+            ->url('https://api.weixin.qq.com/cgi-bin/message/mass/preview');
     }
 
     protected function getApiPrefix()
