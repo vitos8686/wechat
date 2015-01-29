@@ -23,4 +23,9 @@ class SendAllMessage extends Client
             ))
             ->url('https://api.weixin.qq.com/cgi-bin/message/mass/sendall');
     }
+
+    protected function getApiPrefix()
+    {
+        return null;
+    }
 } 
