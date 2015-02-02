@@ -29,6 +29,8 @@ abstract class AccessCacheListener implements EventSubscriberInterface
      */
     abstract public function onGetCache(AccessCacheEvent $accessCacheEvent);
 
+    abstract public function onFlush();
+
     /**
      * 你可以重写此方法，设置事件优先级等等..
      * 注册事件名称与触发方法的映射关系
@@ -43,7 +45,8 @@ abstract class AccessCacheListener implements EventSubscriberInterface
     {
         return array(
             Event::CLIENT_ACCESS_CACHE_GET => 'onGetCache',
-            Event::CLIENT_ACCESS_CACHE_SET => 'onSetCache'
+            Event::CLIENT_ACCESS_CACHE_SET => 'onSetCache',
+            Event::CLIENT_ACCESS_CACHE_FLUSH => 'onFlush'
         );
     }
 } 
