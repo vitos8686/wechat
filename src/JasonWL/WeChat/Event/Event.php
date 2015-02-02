@@ -17,6 +17,7 @@ class Event
     CONST SERVICE_LOGGER = 'service_logger';
     CONST CLIENT_ACCESS_CACHE_SET = 'set_client_access_cache';
     CONST CLIENT_ACCESS_CACHE_GET = 'get_client_access_cache';
+    CONST CLIENT_ACCESS_CACHE_FLUSH = 'flush_client_access_cache';
 
     CONST MESSAGE_TEXT = 'text';
     CONST MESSAGE_IMAGE = 'image';

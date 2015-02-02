@@ -190,6 +190,11 @@ class Client
             throw new WeChatException("微信端数据异常");
         }
         if (isset($responseArr['errcode']) && $responseArr['errcode'] != 0) {
+            if ($responseArr['errcode'] == '40001') {
+                self::getDispatcher()->dispatch(
+                    Event::CLIENT_ACCESS_CACHE_FLUSH
+                );
+            }
             throw new WeChatException('微信端API的错误消息:' . $responseArr['errmsg'], $responseArr['errcode']);
         }
         return $responseArr;

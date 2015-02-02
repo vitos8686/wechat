@@ -19,6 +19,7 @@ class ApiList
     CONST MEDIA_DOWNLOAD = 'http://file.api.weixin.qq.com/cgi-bin/media/get';
     CONST MENU_CREATE = '/menu/create';
     CONST MENU_GET = '/menu/get';
+    CONST MENU_DELETE = '/menu/delete';
 
     CONST USER_INFO = '/user/info';
 } 

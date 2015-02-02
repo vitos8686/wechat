@@ -27,4 +27,10 @@ class Menu extends Client
         $this->url(ApiList::MENU_GET);
         return $this->request();
     }
+
+    public function delete()
+    {
+        $this->url(ApiList::MENU_DELETE);
+        return $this->request();
+    }
 } 
