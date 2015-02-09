@@ -22,4 +22,5 @@ class ApiList
     CONST MENU_DELETE = '/menu/delete';
 
     CONST USER_INFO = '/user/info';
+    CONST JSTICKET_GET = '/ticket/getticket';
 } 
