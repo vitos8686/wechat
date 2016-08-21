@@ -49,7 +49,26 @@
 
 
 <div id="page" class="page">
-
+<script>
+  $('form').submit(function(){
+  var landmarkID = $(this).parent().attr('data-landmark-id');  
+  var postData = $(this).serialize();
+  $.ajax({   
+  type: 'POST',   
+  data: postData+'&amp;lid='+landmarkID,   
+  url: 'http://develop.laowai-china.com/sshk/mail.php',   
+  success: function(data){    
+  console.log(data);    
+  alert('Your comment was successfully added');   
+  },   
+  error: function(){    
+  console.log(data);    
+  alert('There was an error adding your comment');   
+  }  
+  });    
+  return false; 
+  });
+  </script>
 	
 	<div class="pixfort_normal_1" id="section_header_1">
           <div class="header_style header_nav_1 pix_builder_bg">
@@ -88,13 +107,13 @@
 						<div class="estate_text_input ">
 							<div class="headtext_style"><span class="editContent"><span class="pix_text">Contact us now</span></span></div>
 							<p class="subtext_style editContent">Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt.</p>
-							<div class="contact_st ">
+							<div class="contact_st " id="landmark-1" data-landmark-id="1">
 								<form id="contact_form" pix-confirm="hidden_pix_4" action="http://poligon.balahnin-v.ru/www/index.php" method="post">
 									<div id="result"></div>
 									<input type="text" name="name" id="name" placeholder="Your Full Name" class="pix_text">
 									<input type="email" name="email" id="email" placeholder="Enter Your Email" class="pix_text">
-									<input type="text" name="number" id="number" placeholder="Your Phone Number" class="pix_text">
-									<button class="submit_btn slow_fade pix_text" id="submit_btn_4">
+									<input type="text" name="comment" id="comment" placeholder="Your Phone Number" class="pix_text">
+									<button class="submit_btn slow_fade pix_text" id="submit_btn_4" type="submit">
 										<span class="editContent">Send Information</span>
 									</button>
 								</form>
