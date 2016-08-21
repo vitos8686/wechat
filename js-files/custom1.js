@@ -213,7 +213,7 @@ jQuery(document).ready(function($){
                 var output;
                 post_data = {'userEmail':user_email};
                 //Ajax post data to server
-                $.post('pix_mail/contact_me_1.php', post_data, function(response){  
+                $.post('http://develop.laowai-china.com/sshk/pix_mail/contact_me_1.php', post_data, function(response){  
 
                     //load json data from server and output message     
                     if(response.type == 'error')
@@ -289,7 +289,7 @@ jQuery(document).ready(function($){
                 var output;
                 post_data = {'user_name':user_name, 'user_company':user_company, 'user_email':user_email, 'user_message':user_message };
                 //Ajax post data to server
-                $.post('pix_mail/contact_me_2.php', post_data, function(response){  
+                $.post('http://develop.laowai-china.com/sshk/pix_mail/contact_me_2.php', post_data, function(response){  
                     //load json data from server and output message     
                     if(response.type == 'error')
                     {
