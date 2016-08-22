@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;">
+        
+	<title>jQuery form post</title>
+	
+	
+	
+	<script src="js/jquery-1.8.3.min.js"></script>
+    
+        <script src="js/angular.js"></script>
+        <script src="js/angularApp.js"></script>
+        <script src="js/angularController.js"></script>
+        <script src="js/angular-resource.min.js"></script>
+
+        
+    <style>
+        label, b {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="modal-body" id="login" ng-app="angularpost" ng-controller="signup">
+
+			
+     <div class="item-content">
+        <div class="item-inner">
+          <div class="item-input">
+          <input type="text" class="form-control" placeholder="imya" required name="imya" ng-model="imya">
+	   </div>
+        </div>
+      </div>
+    </br>		 <div class="item-content">
+        <div class="item-inner">
+          <div class="item-input">
+          <input id="wechat" name="wechat" type="text" class="form-control" required placeholder="" ng-model="wechat">
+             </div>
+        </div>
+      </div>
+    </br>		 <div class="item-content">
+        <div class="item-inner">
+          <div class="item-input">          
+<input type="email" class="form-control" placeholder="Email" id="post_title" name="post_title" ng-model="email" required>
+           </div>
+        </div>
+      </div>
+</br>
+		  <div class="item-content">
+        <div class="item-inner">
+          <div class="item-input">     
+  <textarea class="form-control" required placeholder="content" id="post_content" required name="post_content" ng-model="post_content"></textarea>
+             </div>
+        </div>
+      </div>
+    </br>		   
+    
+	</br>
+<span id="message">{{message}}</span>
+	</br>
+	<input ng-click="check_credentials()" class="btn btn-success btn-block" style="width: 96%; margin-left: 4%; height: 50px;" type="submit" id="submit" name="button" value="{{translation.send}}" id="sub"/>
+	</div> 
+</div>
+
+</body>
+</html>
