@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>ANNA BALAHNINA</title>
+
+  <!-- JS dependencies -->
+  <script src="lib/onsen/js/onsenui.js"></script>
+  <script src="lib/angular/angular.min.js"></script>
+  <script src="lib/onsen/js/angular-onsenui.js"></script>
+
+  <!-- CSS dependencies -->
+  <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
+  <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css">
+
+  <!-- App init -->
+  <script src="js/app.js"></script>
+<script src="https://snapwidget.com/js/snapwidget.js"></script>
+</head>
+<body>
+  <!-- Cordova reference -->
+  <script src="cordova.js"></script>
+  <script src="scripts/index.js"></script>
+
+  <!-- App layout -->
+  <ons-splitter var="mySplitter" ng-controller="SplitterController as splitter">
+    <ons-splitter-side side="left" width="220px" collapse swipeable>
+      <ons-page>
+        <ons-list>
+          <ons-list-item ng-click="splitter.load('home.html')" tappable>
+            Главная
+          </ons-list-item>
+          <ons-list-item ng-click="splitter.load('settings.html')" tappable>
+            Мои работы
+          </ons-list-item>
+          <ons-list-item ng-click="splitter.load('about.html')" tappable>
+            Записаться
+          </ons-list-item>
+        </ons-list>
+      </ons-page>
+    </ons-splitter-side>
+    <ons-splitter-content page="home.html"></ons-splitter-content>
+  </ons-splitter>
+
+  <ons-template id="home.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button ng-click="mySplitter.left.open()">
+            <ons-icon icon="md-menu"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <div class="center">
+          НОГТЕВОЙ СЕРВИС
+        </div>
+      </ons-toolbar>
+      
+<iframe src="https://snapwidget.com/embed/251003" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:100%; "></iframe>
+
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="settings.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button ng-click="mySplitter.left.open()">
+            <ons-icon icon="md-menu"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <div class="center">
+          Settings
+        </div>
+      </ons-toolbar>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="about.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button ng-click="mySplitter.left.open()">
+            <ons-icon icon="md-menu"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <div class="center">
+          About
+        </div>
+      </ons-toolbar>
+    </ons-page>
+  </ons-template>
+
+</body>
+</html>
